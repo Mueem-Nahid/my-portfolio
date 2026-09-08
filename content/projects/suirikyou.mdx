@@ -1,0 +1,29 @@
+---
+title: "Suirikyou"
+summary: "End-to-end Stripe billing platform for a Japanese sanitation certification service."
+role: "Fullstack Engineer"
+period: "2023 – present"
+size: "2x2"
+featured: true
+tech: ["Next.js", "TypeScript", "tRPC", "Prisma", "PostgreSQL", "NextAuth", "Stripe", "AWS SES", "Upstash QStash", "Docker", "Vercel"]
+highlights:
+  - "Architected an end-to-end Stripe subscription billing system — recurring payments, webhooks, plan upgrades, proration, invoice & receipt PDF generation, retry flows, and a self-service customer portal."
+  - "Built a high-throughput email campaign engine on AWS SES with per-recipient delivery tracking and async job processing via Upstash QStash."
+liveUrl: ""
+repoUrl: ""
+image: "/images/projects/suirikyou.svg"
+---
+
+## Problem
+
+A Japanese sanitation certification service needed to run its business on subscriptions: recurring billing, mid-cycle plan changes with correct proration, reliable invoicing, and a portal where customers manage everything themselves.
+
+## Approach
+
+Architected the billing system end to end on Stripe — recurring payments, webhooks, plan upgrades, proration, invoice and receipt PDF generation, retry flows for failed payments, and a self-service customer portal.
+
+Alongside billing, built a high-throughput email campaign engine on AWS SES with per-recipient delivery tracking, processing jobs asynchronously via Upstash QStash.
+
+## Outcome
+
+The platform is in production today, serving the certification service's billing and customer-facing email delivery end to end.

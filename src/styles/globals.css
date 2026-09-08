@@ -1,0 +1,104 @@
+@import "tailwindcss";
+
+/* ---------------------------------------------------------------------------
+ * Design tokens — "Control Room" (docs/requirments.md §5.2)
+ * Dark mode only — deliberate ops-dashboard aesthetic, no light/dark toggle.
+ * ------------------------------------------------------------------------- */
+
+:root {
+  /* Color */
+  --bg-base: #0b1220;
+  --bg-panel: #121b2e;
+  --bg-glass: rgba(18, 27, 46, 0.55);
+  --bg-glass-fallback: rgba(18, 27, 46, 0.92);
+  --border-hairline: rgba(255, 255, 255, 0.08);
+  --text-primary: #e8ecf4;
+  --text-muted: #8b96ab;
+  --accent-signal: #34d399;
+  --accent-warm: #f2a65a;
+
+  color-scheme: dark;
+}
+
+/* Map spec tokens to Tailwind v4 utilities.
+   e.g. bg-canvas, bg-panel, border-line, text-ink, text-muted, text-signal, text-warm */
+@theme inline {
+  --color-canvas: var(--bg-base);
+  --color-panel: var(--bg-panel);
+  --color-line: var(--border-hairline);
+  --color-ink: var(--text-primary);
+  --color-muted: var(--text-muted);
+  --color-signal: var(--accent-signal);
+  --color-warm: var(--accent-warm);
+
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains-mono), ui-monospace, "SFMono-Regular",
+    Menlo, Consolas, monospace;
+
+  /* The only continuous/ambient animation on the page (§5.4) */
+  --animate-pulse-dot: pulse-dot 2s ease-in-out infinite;
+
+  @keyframes pulse-dot {
+    0%,
+    100% {
+      opacity: 1;
+      box-shadow: 0 0 0 0 rgba(52, 211, 153, 0.45);
+    }
+    50% {
+      opacity: 0.75;
+      box-shadow: 0 0 0 5px rgba(52, 211, 153, 0);
+    }
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--bg-base);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+}
+
+::selection {
+  background-color: rgba(242, 165, 90, 0.25);
+  color: var(--text-primary);
+}
+
+/* Glass surface — floating elements only: sticky nav, hero status card,
+   tooltips (§5.1). Solid fallback when backdrop-filter is unsupported. */
+.glass {
+  background-color: var(--bg-glass-fallback);
+  border: 1px solid var(--border-hairline);
+}
+
+@supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .glass {
+    background-color: var(--bg-glass);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+  }
+}
+
+/* Visible keyboard focus on all interactive elements (§5.5) */
+:where(a, button, [role="button"], input, summary, [tabindex]):focus-visible {
+  outline: 2px solid var(--accent-warm);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* Motion responds to the user, never plays at them (§5.4) */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

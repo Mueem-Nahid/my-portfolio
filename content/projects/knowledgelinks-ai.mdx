@@ -1,0 +1,29 @@
+---
+title: "Knowledgelinks AI"
+summary: "RAG system with context-aware responses over large documents, audio, and images."
+role: "Fullstack Engineer"
+period: "2023 – present"
+size: "2x1"
+featured: true
+tech: ["Next.js", "TypeScript", "Prisma", "LangChain", "OpenAI", "PostgreSQL", "ChromaDB", "Redis", "WebSocket", "Python", "Docker", "AWS"]
+highlights:
+  - "Engineered and scaled a Retrieval-Augmented Generation (RAG) system delivering intelligent, context-aware responses."
+  - "Optimized performance by handling large documents, audio, and images efficiently through queues, Redis, and WebSockets."
+liveUrl: ""
+repoUrl: ""
+image: "/images/projects/knowledgelinks-ai.svg"
+---
+
+## Problem
+
+The product needed to answer questions with context drawn from users' own knowledge bases — where a single source could be a large document, an audio file, or an image.
+
+## Approach
+
+Engineered and scaled a Retrieval-Augmented Generation pipeline with LangChain and OpenAI over ChromaDB and PostgreSQL, delivering context-aware responses.
+
+To keep responses fast under heavy inputs, large documents, audio, and images are processed asynchronously through queues and Redis, with progress pushed to the client over WebSockets.
+
+## Outcome
+
+The system runs in production, handling multi-modal knowledge sources at scale for the client.
