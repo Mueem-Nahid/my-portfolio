@@ -1,69 +1,135 @@
-import Image from "next/image";
+import { Heading } from "@/components/atoms/Heading";
+import { Reveal } from "@/components/atoms/Reveal";
+import { Text } from "@/components/atoms/Text";
+import { BentoGrid } from "@/components/organisms/BentoGrid";
+import { ContactSection } from "@/components/organisms/ContactSection";
+import { ExperienceTimeline } from "@/components/organisms/ExperienceTimeline";
+import { HeroStatusCard } from "@/components/organisms/HeroStatusCard";
+import { StackSection } from "@/components/organisms/StackSection";
+import { PageShell } from "@/components/templates/PageShell";
+import {
+  getAllProjects,
+  getEducation,
+  getExperience,
+  getProfile,
+} from "@/lib/content";
+import { personJsonLd } from "@/lib/seo";
+import { getStackGroups } from "@/lib/stack";
 
 export default function Home() {
+  const profile = getProfile();
+  const projects = getAllProjects();
+  const experience = getExperience();
+  const education = getEducation();
+  const stackGroups = getStackGroups();
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
+    <PageShell profile={profile}>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(personJsonLd(profile)).replace(/</g, "\\u003c"),
+        }}
+      />
+      <section
+        id="hero"
+        aria-label="Introduction"
+        className="flex flex-col items-start gap-6 pt-20 pb-24 sm:pt-28"
+      >
+        <Reveal>
+          <div className="flex flex-col items-start gap-6">
+            <HeroStatusCard
+              statusLine={profile.statusLine}
+              location={profile.location}
             />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+            <div>
+              <Heading as="h1" size="xl">
+                {profile.name}
+              </Heading>
+              <Text size="lg" className="mt-2">
+                {profile.title}
+              </Text>
+            </div>
+            <Text tone="muted" className="max-w-prose">
+              {profile.tagline}
+            </Text>
+          </div>
+        </Reveal>
+      </section>
+
+      <section id="work" aria-labelledby="work-heading" className="scroll-mt-20 pb-24">
+        <Heading as="h2" size="lg" id="work-heading" className="mb-3">
+          Work
+        </Heading>
+        <Text tone="muted" className="mb-8 max-w-prose">
+          Production systems shipped for Japanese clients at Brand Cloud Inc,
+          plus earlier work at W3 Engineers.
+        </Text>
+        <BentoGrid projects={projects} />
+      </section>
+
+      <section
+        id="experience"
+        aria-labelledby="experience-heading"
+        className="scroll-mt-20 pb-24"
+      >
+        <Heading as="h2" size="lg" id="experience-heading" className="mb-8">
+          Experience
+        </Heading>
+        <ExperienceTimeline entries={experience} />
+      </section>
+
+      <section id="stack" aria-labelledby="stack-heading" className="scroll-mt-20 pb-24">
+        <Heading as="h2" size="lg" id="stack-heading" className="mb-3">
+          Stack
+        </Heading>
+        <Text tone="muted" className="mb-8 max-w-prose">
+          Grouped by how they&apos;re used across the projects above — five
+          ecosystems, all in production.
+        </Text>
+        <StackSection groups={stackGroups} />
+      </section>
+
+      <section
+        id="education"
+        aria-labelledby="education-heading"
+        className="scroll-mt-20 pb-24"
+      >
+        <Heading as="h2" size="lg" id="education-heading" className="mb-8">
+          Education
+        </Heading>
+        <ul className="space-y-4">
+          {education.map((entry) => (
+            <li
+              key={entry.institution}
+              className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1 rounded-lg border border-line bg-panel px-5 py-4"
+            >
+              <div>
+                <Heading as="h3" size="sm">
+                  {entry.degree}
+                </Heading>
+                <Text tone="muted" size="sm">
+                  {entry.institution} · {entry.location}
+                </Text>
+              </div>
+              <Text as="span" mono tone="muted" className="shrink-0 text-xs">
+                {entry.start} – {entry.end} · {entry.grade}
+              </Text>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section
+        id="contact"
+        aria-labelledby="contact-heading"
+        className="scroll-mt-20 pb-24"
+      >
+        <Heading as="h2" size="lg" id="contact-heading" className="mb-8">
+          Contact
+        </Heading>
+        <ContactSection profile={profile} />
+      </section>
+    </PageShell>
   );
 }

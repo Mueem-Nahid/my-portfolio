@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, JetBrains_Mono } from "next/font/google";
+import { getProfile } from "@/lib/content";
+import { SITE_URL } from "@/lib/seo";
 import "@/styles/globals.css";
 
 const geistSans = Geist({
@@ -12,11 +14,35 @@ const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
 });
 
-// Full SEO metadata (OG, JSON-LD, canonical) is wired in Phase 5 via lib/seo.ts.
+const profile = getProfile();
+
 export const metadata: Metadata = {
-  title: "Mueem Nahid Ibn Mahbub — Senior Fullstack Engineer",
-  description:
-    "Senior fullstack engineer building production SaaS for Japanese clients: billing systems, RAG pipelines, and live tracking platforms.",
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: `${profile.name} — ${profile.title}`,
+    template: `%s — ${profile.name}`,
+  },
+  description: profile.tagline,
+  alternates: {
+    canonical: "/",
+  },
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: "/",
+    siteName: profile.name,
+    title: `${profile.name} — ${profile.title}`,
+    description: profile.tagline,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: `${profile.name} — ${profile.title}`,
+    description: profile.tagline,
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
