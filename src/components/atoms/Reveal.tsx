@@ -1,25 +1,18 @@
-"use client";
+import { cx } from "@/lib/cx";
 
-import { motion, useReducedMotion } from "framer-motion";
-import type { ReactNode } from "react";
+type RevealProps = {
+  children: React.ReactNode;
+  className?: string;
+};
 
 /**
  * The single orchestrated load sequence (§5.4): hero content settles in as
- * one short fade/rise (~500ms). Everything else on the page is static until
- * interacted with. Disabled entirely under prefers-reduced-motion (§5.5).
+ * one short fade/rise (~500ms), pure CSS — content stays visible if JS never
+ * runs, and the global prefers-reduced-motion reset collapses it to instant
+ * (§5.5). Everything else on the page is static until interacted with.
  */
-export function Reveal({ children }: { children: ReactNode }) {
-  const reduce = useReducedMotion();
-
-  if (reduce) return <>{children}</>;
-
+export function Reveal({ children, className }: RevealProps) {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 12 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, ease: "easeOut" }}
-    >
-      {children}
-    </motion.div>
+    <div className={cx("animate-hero-reveal", className)}>{children}</div>
   );
 }

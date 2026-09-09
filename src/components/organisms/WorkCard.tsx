@@ -15,6 +15,8 @@ const sizeClasses: Record<Project["size"], string> = {
 
 type WorkCardProps = {
   project: Project;
+  /** Pass for the first above-the-fold card image (LCP) */
+  imagePriority?: boolean;
 };
 
 /**
@@ -22,7 +24,7 @@ type WorkCardProps = {
  * border glow on hover (devices with a real pointer), no scroll-triggered
  * reveals. Links to /work/[slug] only when the project has an MDX body.
  */
-export function WorkCard({ project }: WorkCardProps) {
+export function WorkCard({ project, imagePriority = false }: WorkCardProps) {
   const showImage = project.image !== "" && project.size !== "1x1";
 
   const classes = cx(
@@ -35,11 +37,12 @@ export function WorkCard({ project }: WorkCardProps) {
   const body = (
     <>
       {showImage ? (
-        <div className="relative -mx-5 -mt-5 mb-4 aspect-[3/2] overflow-hidden border-b border-line lg:aspect-auto lg:h-36">
+        <div className="relative -mx-5 -mt-5 mb-4 h-44 overflow-hidden border-b border-line sm:h-48 lg:h-36">
           <Image
             src={project.image}
             alt={`${project.title} cover`}
             fill
+            priority={imagePriority}
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 600px"
             className="object-cover"
           />

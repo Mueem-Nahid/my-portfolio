@@ -5,7 +5,8 @@ import { Heading } from "@/components/atoms/Heading";
 import { Link } from "@/components/atoms/Link";
 import { Text } from "@/components/atoms/Text";
 import { ProjectDetailTemplate } from "@/components/templates/ProjectDetailTemplate";
-import { getProjectBySlug, getProjectsWithBody } from "@/lib/content";
+import { PageShell } from "@/components/templates/PageShell";
+import { getProfile, getProjectBySlug, getProjectsWithBody } from "@/lib/content";
 import { projectJsonLd } from "@/lib/seo";
 
 /**
@@ -55,31 +56,35 @@ export default async function ProjectPage({
 
   if (!project || !project.hasBody) notFound();
 
+  const profile = getProfile();
+
   return (
-    <ProjectDetailTemplate project={project}>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(projectJsonLd(project)).replace(/</g, "\\u003c"),
-        }}
-      />
-      <MDXRemote
-        source={project.body}
-        components={{
-          h2: (props) => (
-            <Heading as="h2" size="md" className="mt-10" {...props} />
-          ),
-          p: (props) => <Text tone="muted" className="mt-4" {...props} />,
-          ul: (props) => (
-            <ul
-              className="mt-4 list-disc space-y-2 pl-5 text-muted"
-              {...props}
-            />
-          ),
-          li: (props) => <li className="text-sm leading-6" {...props} />,
-          a: (props) => <Link href={props.href ?? "#"} {...props} />,
-        }}
-      />
-    </ProjectDetailTemplate>
+    <PageShell profile={profile}>
+      <ProjectDetailTemplate project={project}>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(projectJsonLd(project)).replace(/</g, "\\u003c"),
+          }}
+        />
+        <MDXRemote
+          source={project.body}
+          components={{
+            h2: (props) => (
+              <Heading as="h2" size="md" className="mt-10" {...props} />
+            ),
+            p: (props) => <Text tone="muted" className="mt-4" {...props} />,
+            ul: (props) => (
+              <ul
+                className="mt-4 list-disc space-y-2 pl-5 text-muted"
+                {...props}
+              />
+            ),
+            li: (props) => <li className="text-sm leading-6" {...props} />,
+            a: (props) => <Link href={props.href ?? "#"} {...props} />,
+          }}
+        />
+      </ProjectDetailTemplate>
+    </PageShell>
   );
 }
