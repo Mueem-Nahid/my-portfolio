@@ -12,10 +12,15 @@ type StatusDotProps = {
  */
 export function StatusDot({ className, label = "Online" }: StatusDotProps) {
   return (
-    <span className={cx("inline-flex items-center", className)}>
+    <span className={cx("relative inline-flex items-center", className)}>
+      {/* expanding ring — pure transform/opacity, compositor-only */}
       <span
         aria-hidden="true"
-        className="inline-block size-2 rounded-full bg-signal animate-pulse-dot"
+        className="absolute inline-flex size-2 rounded-full bg-signal animate-pulse-dot"
+      />
+      <span
+        aria-hidden="true"
+        className="relative inline-flex size-2 rounded-full bg-signal"
       />
       <span className="sr-only">{label}</span>
     </span>

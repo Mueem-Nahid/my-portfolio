@@ -79,7 +79,8 @@ export function ProjectDetailTemplate({
             src={project.image}
             alt={`${project.title} cover`}
             fill
-            priority
+            loading="eager"
+            fetchPriority="high"
             sizes="(max-width: 1152px) 100vw, 1152px"
             className="object-cover"
           />

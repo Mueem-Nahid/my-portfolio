@@ -68,12 +68,19 @@ const educationSchema = z.object({
 
 export type Profile = z.infer<typeof profileSchema>;
 
+export type ProjectImage = {
+  src: string;
+  alt: string;
+};
+
 export type Project = z.infer<typeof projectSchema> & {
   slug: string;
   /** Raw MDX body ("" when the file has frontmatter only) */
   body: string;
   /** Whether this project gets a generated /work/[slug] detail page */
   hasBody: boolean;
+  /** Screenshots auto-discovered from public/images/projects/<slug>/webp/ */
+  images: ProjectImage[];
 };
 
 export type ExperienceEntry = z.infer<typeof experienceSchema> & {
@@ -145,7 +152,37 @@ function loadProject(filePath: string): Project {
   const frontmatter = parseOrThrow(projectSchema, data, filePath);
   const slug = path.basename(filePath, path.extname(filePath));
   const body = content.trim();
-  return { ...frontmatter, slug, body, hasBody: body.length > 0 };
+  const images = getProjectImages(slug, frontmatter.title);
+  // A real cover screenshot (images[0], cover-first) beats the SVG placeholder.
+  const image = images.length > 0 ? images[0].src : frontmatter.image;
+  return { ...frontmatter, image, slug, body, hasBody: body.length > 0, images };
+}
+
+/**
+ * Screenshots are auto-discovered from public/images/projects/<slug>/webp/ —
+ * adding images later = dropping files into that folder, no frontmatter edit.
+ * Sorted cover-first, then alphabetically.
+ */
+function getProjectImages(slug: string, title: string): ProjectImage[] {
+  const dir = path.join(process.cwd(), "public", "images", "projects", slug, "webp");
+  if (!fs.existsSync(dir)) return [];
+
+  const files = fs
+    .readdirSync(dir)
+    .filter((f) => /\.(webp|png|jpe?g|avif)$/i.test(f))
+    .sort((a, b) => {
+      const aCover = /^cover\./i.test(a) ? 0 : 1;
+      const bCover = /^cover\./i.test(b) ? 0 : 1;
+      return aCover - bCover || a.localeCompare(b);
+    });
+
+  return files.map((file) => {
+    const name = file.replace(/\.[^.]+$/, "").replace(/[-_+]+/g, " ").trim();
+    return {
+      src: `/images/projects/${slug}/webp/${encodeURIComponent(file)}`,
+      alt: `${title} screenshot: ${name}`,
+    };
+  });
 }
 
 export function getAllProjects(): Project[] {

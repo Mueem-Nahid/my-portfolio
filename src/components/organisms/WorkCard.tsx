@@ -42,7 +42,9 @@ export function WorkCard({ project, imagePriority = false }: WorkCardProps) {
             src={project.image}
             alt={`${project.title} cover`}
             fill
-            priority={imagePriority}
+            {...(imagePriority
+              ? { loading: "eager" as const, fetchPriority: "high" as const }
+              : {})}
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 600px"
             className="object-cover"
           />
