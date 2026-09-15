@@ -179,7 +179,7 @@ function getProjectImages(slug: string, title: string): ProjectImage[] {
   return files.map((file) => {
     const name = file.replace(/\.[^.]+$/, "").replace(/[-_+]+/g, " ").trim();
     return {
-      src: `/images/projects/${slug}/webp/${encodeURIComponent(file)}`,
+      src: `/images/projects/${slug}/webp/${file}`,
       alt: `${title} screenshot: ${name}`,
     };
   });

@@ -1,10 +1,10 @@
 import { ChevronLeft, ExternalLink } from "lucide-react";
-import Image from "next/image";
 import NextLink from "next/link";
 import { Badge } from "@/components/atoms/Badge";
 import { Heading } from "@/components/atoms/Heading";
 import { Icon } from "@/components/atoms/Icon";
 import { Text } from "@/components/atoms/Text";
+import { ProjectGallery } from "@/components/organisms/ProjectGallery";
 import type { Project } from "@/lib/content";
 
 type ProjectDetailTemplateProps = {
@@ -73,17 +73,9 @@ export function ProjectDetailTemplate({
         ) : null}
       </header>
 
-      {project.image ? (
-        <div className="relative mt-10 aspect-[3/2] overflow-hidden rounded-xl border border-line sm:aspect-[2/1]">
-          <Image
-            src={project.image}
-            alt={`${project.title} cover`}
-            fill
-            loading="eager"
-            fetchPriority="high"
-            sizes="(max-width: 1152px) 100vw, 1152px"
-            className="object-cover"
-          />
+      {project.images.length > 0 ? (
+        <div className="mt-10">
+          <ProjectGallery images={project.images} title={project.title} />
         </div>
       ) : null}
 
