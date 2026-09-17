@@ -71,6 +71,9 @@ export type Profile = z.infer<typeof profileSchema>;
 export type ProjectImage = {
   src: string;
   alt: string;
+  /** Intrinsic size when readable (webp) — lets the gallery request the right variant */
+  width: number | null;
+  height: number | null;
 };
 
 export type Project = z.infer<typeof projectSchema> & {
@@ -162,6 +165,10 @@ function loadProject(filePath: string): Project {
  * Screenshots are auto-discovered from public/images/projects/<slug>/webp/ —
  * adding images later = dropping files into that folder, no frontmatter edit.
  * Sorted cover-first, then alphabetically.
+ *
+ * Filenames must avoid +, #, % and ? — those characters break Next's image
+ * optimizer (verified: it returns 400 "not a valid image"), so the build fails
+ * loudly here with the fix instead of shipping a broken screenshot.
  */
 function getProjectImages(slug: string, title: string): ProjectImage[] {
   const dir = path.join(process.cwd(), "public", "images", "projects", slug, "webp");
@@ -176,13 +183,60 @@ function getProjectImages(slug: string, title: string): ProjectImage[] {
       return aCover - bCover || a.localeCompare(b);
     });
 
+  for (const file of files) {
+    if (/[+#%?]/.test(file)) {
+      throw new Error(
+        `Unsupported character in image filename: ${file}\n` +
+          `  -> ${path.join(dir, file)}\n` +
+          `Rename the file without +, #, % or ? (those break image optimization).`,
+      );
+    }
+  }
+
   return files.map((file) => {
     const name = file.replace(/\.[^.]+$/, "").replace(/[-_+]+/g, " ").trim();
+    const size = readWebpSize(path.join(dir, file));
     return {
       src: `/images/projects/${slug}/webp/${file}`,
       alt: `${title} screenshot: ${name}`,
+      width: size?.width ?? null,
+      height: size?.height ?? null,
     };
   });
+}
+
+/** Minimal WebP header reader (VP8 / VP8L / VP8X) — no extra dependencies. */
+function readWebpSize(filePath: string): { width: number; height: number } | null {
+  try {
+    const buf = fs.readFileSync(filePath);
+    if (
+      buf.length < 30 ||
+      buf.toString("ascii", 0, 4) !== "RIFF" ||
+      buf.toString("ascii", 8, 12) !== "WEBP"
+    ) {
+      return null;
+    }
+    const format = buf.toString("ascii", 12, 16);
+    if (format === "VP8X") {
+      return {
+        width: buf.readUIntLE(24, 3) + 1,
+        height: buf.readUIntLE(27, 3) + 1,
+      };
+    }
+    if (format === "VP8L") {
+      const bits = buf.readUInt32LE(21);
+      return { width: (bits & 0x3fff) + 1, height: ((bits >> 14) & 0x3fff) + 1 };
+    }
+    if (format === "VP8 ") {
+      return {
+        width: buf.readUInt16LE(26) & 0x3fff,
+        height: buf.readUInt16LE(28) & 0x3fff,
+      };
+    }
+    return null;
+  } catch {
+    return null;
+  }
 }
 
 export function getAllProjects(): Project[] {

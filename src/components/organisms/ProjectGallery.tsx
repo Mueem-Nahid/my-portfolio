@@ -46,19 +46,20 @@ export function ProjectGallery({ images, title }: ProjectGalleryProps) {
     >
       {/* Stage */}
       <div
-        className="group/gallery relative aspect-[4/3] overflow-hidden rounded-xl border border-line bg-canvas sm:aspect-[16/10]"
+        className="group/gallery relative aspect-[4/3] touch-pan-y overscroll-contain overflow-hidden rounded-xl border border-line bg-canvas sm:aspect-[16/10]"
         tabIndex={0}
         onKeyDown={onKeyDown}
         aria-label="Screenshot viewer, use arrow keys to navigate"
       >
-        {/* Ambient backdrop — same image, blurred, fills the letterbox gaps */}
+        {/* Ambient backdrop — the same image, blurred, fills the letterbox gaps.
+            Requested tiny on purpose: the blur hides the low resolution. */}
         <Image
           key={`bg-${current.src}`}
           src={current.src}
           alt=""
           aria-hidden="true"
           fill
-          sizes="(max-width: 1152px) 100vw, 1152px"
+          sizes="128px"
           className="scale-125 object-cover opacity-25 blur-2xl"
         />
         {/* The screenshot itself — never cropped */}
@@ -67,7 +68,7 @@ export function ProjectGallery({ images, title }: ProjectGalleryProps) {
           src={current.src}
           alt={current.alt}
           fill
-          sizes="(max-width: 1152px) 100vw, 1152px"
+          sizes={stageSizes(current)}
           className="object-contain"
           loading={index === 0 ? "eager" : "lazy"}
           fetchPriority={index === 0 ? "high" : "auto"}
@@ -145,6 +146,20 @@ export function ProjectGallery({ images, title }: ProjectGalleryProps) {
       </p>
     </div>
   );
+}
+
+/**
+ * How much resolution the stage actually needs for this image. A 16:10 stage
+ * shows a landscape shot at full width, but a tall phone shot (or an ultra-tall
+ * full-page capture) is letterboxed to a sliver — so a small variant is plenty.
+ * Stage widths: ~342px on phones (4:3), ~1104px in the 6xl container (16:10).
+ */
+function stageSizes(image: ProjectImage): string {
+  if (!image.width || !image.height) return "(max-width: 640px) 342px, 1104px";
+  const aspect = image.width / image.height;
+  const mobile = Math.max(64, Math.round(342 * Math.min(1, aspect / (4 / 3))));
+  const desktop = Math.max(64, Math.round(1104 * Math.min(1, aspect / (16 / 10))));
+  return `(max-width: 640px) ${mobile}px, ${desktop}px`;
 }
 
 function GalleryButton({

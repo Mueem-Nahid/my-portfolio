@@ -68,12 +68,15 @@
 
 html {
   scroll-behavior: smooth;
+  /* A swipe on the gallery must never trigger pull-to-refresh (page reload). */
+  overscroll-behavior-y: none;
 }
 
 body {
   background-color: var(--bg-base);
   color: var(--text-primary);
   font-family: var(--font-sans);
+  overscroll-behavior-y: none;
 }
 
 ::selection {
