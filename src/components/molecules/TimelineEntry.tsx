@@ -1,4 +1,5 @@
 import { Heading } from "@/components/atoms/Heading";
+import { Link } from "@/components/atoms/Link";
 import { Text } from "@/components/atoms/Text";
 
 type TimelineEntryProps = {
@@ -6,6 +7,8 @@ type TimelineEntryProps = {
   period: string;
   role: string;
   company: string;
+  /** Company website — the name opens in a new tab when set */
+  companyUrl?: string;
   location: string;
   /** Expandable project detail (rendered by the organism) */
   children?: React.ReactNode;
@@ -16,6 +19,7 @@ export function TimelineEntry({
   period,
   role,
   company,
+  companyUrl,
   location,
   children,
 }: TimelineEntryProps) {
@@ -29,7 +33,8 @@ export function TimelineEntry({
           {role}
         </Heading>
         <Text tone="muted" size="sm" className="mt-1">
-          {company} · {location}
+          {companyUrl ? <Link href={companyUrl}>{company}</Link> : company} ·{" "}
+          {location}
         </Text>
         {children ? <div className="mt-4 space-y-2">{children}</div> : null}
       </div>

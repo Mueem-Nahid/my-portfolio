@@ -1,5 +1,6 @@
 import NextLink from "next/link";
 import { cx } from "@/lib/cx";
+import { externalHref } from "@/lib/url";
 
 type LinkProps = {
   href: string;
@@ -22,15 +23,18 @@ export function Link({ href, className, children, ariaLabel }: LinkProps) {
       </NextLink>
     );
   }
+
+  // External links open in a new tab; say so for screen readers.
   return (
     <a
-      href={href}
+      href={externalHref(href)}
       className={classes}
-      aria-label={ariaLabel}
+      aria-label={ariaLabel ? `${ariaLabel} (opens in new tab)` : undefined}
       target="_blank"
       rel="noopener noreferrer"
     >
       {children}
+      {ariaLabel ? null : <span className="sr-only"> (opens in new tab)</span>}
     </a>
   );
 }

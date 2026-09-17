@@ -52,6 +52,8 @@ const experienceSchema = z.object({
   /** null = present */
   end: z.string().nullable(),
   location: z.string(),
+  /** Company website — the name becomes an external link when set */
+  url: z.string().default(""),
   projectSlugs: z.array(z.string()).default([]),
 });
 
@@ -62,6 +64,8 @@ const educationSchema = z.object({
   end: z.string(),
   location: z.string(),
   grade: z.string(),
+  /** Institution website — the name becomes an external link when set */
+  url: z.string().default(""),
 });
 
 // ---------- Public types ----------

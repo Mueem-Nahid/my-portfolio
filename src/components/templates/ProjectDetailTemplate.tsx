@@ -6,6 +6,7 @@ import { Icon } from "@/components/atoms/Icon";
 import { Text } from "@/components/atoms/Text";
 import { ProjectGallery } from "@/components/organisms/ProjectGallery";
 import type { Project } from "@/lib/content";
+import { externalHref } from "@/lib/url";
 
 type ProjectDetailTemplateProps = {
   project: Project;
@@ -49,7 +50,7 @@ export function ProjectDetailTemplate({
           <div className="mt-5 flex gap-4">
             {project.liveUrl ? (
               <a
-                href={project.liveUrl}
+                href={externalHref(project.liveUrl)}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-1.5 text-sm text-warm underline decoration-line underline-offset-4 transition-colors hover:decoration-warm"
@@ -60,7 +61,7 @@ export function ProjectDetailTemplate({
             ) : null}
             {project.repoUrl ? (
               <a
-                href={project.repoUrl}
+                href={externalHref(project.repoUrl)}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-1.5 text-sm text-muted underline decoration-line underline-offset-4 transition-colors hover:text-ink"

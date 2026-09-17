@@ -30,6 +30,7 @@ export function ExperienceTimeline({ entries }: ExperienceTimelineProps) {
             period={formatPeriod(entry.start, entry.end)}
             role={entry.role}
             company={entry.company}
+            companyUrl={entry.url}
             location={entry.location}
           >
             {entry.projects.map((project) => (

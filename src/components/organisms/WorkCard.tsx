@@ -1,10 +1,13 @@
 import Image from "next/image";
 import NextLink from "next/link";
+import { ExternalLink } from "lucide-react";
 import { Heading } from "@/components/atoms/Heading";
+import { Icon } from "@/components/atoms/Icon";
 import { Text } from "@/components/atoms/Text";
 import { ProjectTag } from "@/components/molecules/ProjectTag";
 import { cx } from "@/lib/cx";
 import type { Project } from "@/lib/content";
+import { externalHref } from "@/lib/url";
 
 const sizeClasses: Record<Project["size"], string> = {
   "1x1": "",
@@ -22,20 +25,26 @@ type WorkCardProps = {
 /**
  * One bento cell. Motion responds to the user only (§5.4): subtle scale +
  * border glow on hover (devices with a real pointer), no scroll-triggered
- * reveals. Links to /work/[slug] only when the project has an MDX body.
+ * reveals.
+ *
+ * When the project has an MDX body the title carries a stretched link to
+ * /work/[slug], so the whole card stays clickable while a separate live-site
+ * link can sit above it (no nested anchors).
  */
 export function WorkCard({ project, imagePriority = false }: WorkCardProps) {
   const showImage = project.image !== "" && project.size !== "1x1";
+  const hasActions = project.hasBody || project.liveUrl !== "";
 
   const classes = cx(
     "group relative flex h-full flex-col overflow-hidden rounded-xl border border-line bg-panel p-5 transition-transform duration-200 ease-out",
     "hover:scale-[1.015] hover:border-warm/30 hover:shadow-[0_0_32px_rgba(242,165,90,0.08)]",
     "motion-reduce:transition-none motion-reduce:hover:transform-none",
+    "focus-within:border-warm/30",
     sizeClasses[project.size],
   );
 
-  const body = (
-    <>
+  return (
+    <article className={classes}>
       {showImage ? (
         <div className="relative -mx-5 -mt-5 mb-4 h-44 overflow-hidden border-b border-line sm:h-48 lg:h-36">
           <Image
@@ -52,7 +61,16 @@ export function WorkCard({ project, imagePriority = false }: WorkCardProps) {
       ) : null}
       <div className="flex items-baseline justify-between gap-3">
         <Heading as="h3" size={project.size === "1x1" ? "sm" : "md"}>
-          {project.title}
+          {project.hasBody ? (
+            <NextLink
+              href={`/work/${project.slug}`}
+              className="after:absolute after:inset-0 after:content-['']"
+            >
+              {project.title}
+            </NextLink>
+          ) : (
+            project.title
+          )}
         </Heading>
         <Text as="span" mono tone="muted" className="shrink-0 text-xs">
           {project.period}
@@ -66,24 +84,31 @@ export function WorkCard({ project, imagePriority = false }: WorkCardProps) {
           <ProjectTag key={tech} name={tech} />
         ))}
       </div>
-      {project.hasBody ? (
-        <Text
-          as="span"
-          mono
-          className="mt-3 text-xs text-warm opacity-0 transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100"
-        >
-          View case study
-        </Text>
+      {hasActions ? (
+        <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1">
+          {project.hasBody ? (
+            <Text
+              as="span"
+              mono
+              className="text-xs text-warm opacity-0 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100"
+            >
+              View case study
+            </Text>
+          ) : null}
+          {project.liveUrl ? (
+            <a
+              href={externalHref(project.liveUrl)}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="relative z-10 inline-flex items-center gap-1.5 font-mono text-xs text-signal transition-colors hover:text-ink hover:underline"
+            >
+              <Icon icon={ExternalLink} size={12} />
+              Live
+              <span className="sr-only"> site (opens in new tab)</span>
+            </a>
+          ) : null}
+        </div>
       ) : null}
-    </>
+    </article>
   );
-
-  if (project.hasBody) {
-    return (
-      <NextLink href={`/work/${project.slug}`} className={classes}>
-        {body}
-      </NextLink>
-    );
-  }
-  return <article className={classes}>{body}</article>;
 }

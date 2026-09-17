@@ -1,4 +1,5 @@
 import { Heading } from "@/components/atoms/Heading";
+import { Link } from "@/components/atoms/Link";
 import { Reveal } from "@/components/atoms/Reveal";
 import { Text } from "@/components/atoms/Text";
 import { BentoGrid } from "@/components/organisms/BentoGrid";
@@ -109,7 +110,12 @@ export default function Home() {
                   {entry.degree}
                 </Heading>
                 <Text tone="muted" size="sm">
-                  {entry.institution} · {entry.location}
+                  {entry.url ? (
+                    <Link href={entry.url}>{entry.institution}</Link>
+                  ) : (
+                    entry.institution
+                  )}{" "}
+                  · {entry.location}
                 </Text>
               </div>
               <Text as="span" mono tone="muted" className="shrink-0 text-xs">
