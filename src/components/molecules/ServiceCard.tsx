@@ -23,7 +23,7 @@ export function ServiceCard({ service, ctaHref, ctaLabel = "Get a quote" }: Serv
   const Lucide = ICONS[service.icon] ?? Layout;
 
   return (
-    <article className="flex h-full flex-col rounded-xl border border-line bg-panel p-5 transition-colors duration-200 hover:border-warm/30 hover:shadow-[0_0_32px_rgba(242,165,90,0.08)] motion-reduce:transition-none">
+    <article className="flex h-full flex-col rounded-xl border border-line bg-panel p-5 transition-transform duration-200 ease-out hover:scale-[1.015] hover:border-warm/30 hover:shadow-[0_0_32px_rgba(242,165,90,0.08)] motion-reduce:transition-none motion-reduce:hover:transform-none">
       <Icon icon={Lucide} size={20} className="text-warm" />
       <Heading as="h3" size="sm" className="mt-3">
         {service.title}
