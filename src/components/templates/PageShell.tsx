@@ -3,12 +3,15 @@ import { Navbar, type NavItem } from "@/components/organisms/Navbar";
 import type { Profile } from "@/lib/content";
 
 const NAV_ITEMS: NavItem[] = [
+  { label: "Services", href: "#services" },
   { label: "Work", href: "#work" },
+  { label: "Lab", href: "#lab" },
   { label: "Experience", href: "#experience" },
   { label: "Stack", href: "#stack" },
-  { label: "Education", href: "#education" },
   { label: "Contact", href: "#contact" },
 ];
+
+const NAV_CTA: NavItem = { label: "Work with me", href: "#services" };
 
 type PageShellProps = {
   profile: Profile;
@@ -27,7 +30,7 @@ export function PageShell({ profile, children }: PageShellProps) {
       >
         Skip to content
       </a>
-      <Navbar name={shortName} items={NAV_ITEMS} />
+      <Navbar name={shortName} items={NAV_ITEMS} cta={NAV_CTA} />
       <main id="main" className="mx-auto w-full max-w-6xl flex-1 px-6">
         {children}
       </main>
