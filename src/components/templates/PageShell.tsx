@@ -3,11 +3,11 @@ import { Navbar, type NavItem } from "@/components/organisms/Navbar";
 import type { Profile } from "@/lib/content";
 
 const NAV_ITEMS: NavItem[] = [
-  { label: "Services", href: "#services" },
   { label: "Work", href: "#work" },
   { label: "Lab", href: "#lab" },
   { label: "Experience", href: "#experience" },
   { label: "Stack", href: "#stack" },
+  { label: "Services", href: "#services" },
   { label: "Contact", href: "#contact" },
 ];
 

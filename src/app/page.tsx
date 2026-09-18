@@ -81,16 +81,6 @@ export default function Home() {
         </Reveal>
       </section>
 
-      <section id="services" aria-labelledby="services-heading" className="scroll-mt-20 pb-24">
-        <Heading as="h2" size="lg" id="services-heading" className="mb-3">
-          Services
-        </Heading>
-        <Text tone="muted" className="mb-8 max-w-prose">
-          What you can hire me for — scoped, quoted in writing, shipped to production.
-        </Text>
-        <ServicesGrid services={services} email={profile.email} />
-      </section>
-
       <section id="work" aria-labelledby="work-heading" className="scroll-mt-20 pb-24">
         <Heading as="h2" size="lg" id="work-heading" className="mb-3">
           Work
@@ -129,6 +119,16 @@ export default function Home() {
           ecosystems, all in production.
         </Text>
         <StackSection groups={stackGroups} />
+      </section>
+
+      <section id="services" aria-labelledby="services-heading" className="scroll-mt-20 pb-24">
+        <Heading as="h2" size="lg" id="services-heading" className="mb-3">
+          Services
+        </Heading>
+        <Text tone="muted" className="mb-8 max-w-prose">
+          What you can hire me for — scoped, quoted in writing, shipped to production.
+        </Text>
+        <ServicesGrid services={services} email={profile.email} />
       </section>
 
       {faqs.length > 0 ? (
