@@ -16,7 +16,7 @@ type LabProjectCardProps = {
 /** Compact workbench card — title, one-line summary, chips, links. No big cover. */
 export function LabProjectCard({ project }: LabProjectCardProps) {
   return (
-    <article className="flex w-72 shrink-0 snap-start flex-col rounded-xl border border-line bg-panel p-5 transition-transform duration-200 ease-out hover:scale-[1.015] hover:border-warm/30 motion-reduce:transition-none motion-reduce:hover:transform-none sm:w-80">
+    <article className="flex w-[min(18rem,80vw)] shrink-0 snap-start flex-col rounded-xl border border-line bg-panel p-5 transition-transform duration-200 ease-out hover:scale-[1.015] hover:border-warm/30 motion-reduce:transition-none motion-reduce:hover:transform-none sm:w-80">
       <LabProjectMeta tech={project.tech} status={project.status} lastUpdated={project.lastUpdated} />
       <Heading as="h3" size="sm" className="mt-3">
         {project.hasBody ? (

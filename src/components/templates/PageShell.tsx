@@ -31,7 +31,7 @@ export function PageShell({ profile, children }: PageShellProps) {
         Skip to content
       </a>
       <Navbar name={shortName} items={NAV_ITEMS} cta={NAV_CTA} />
-      <main id="main" className="mx-auto w-full max-w-6xl flex-1 px-6">
+      <main id="main" className="mx-auto w-full max-w-6xl flex-1 px-4 sm:px-6">
         {children}
       </main>
       <Footer profile={profile} />

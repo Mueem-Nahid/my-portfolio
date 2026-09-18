@@ -53,7 +53,7 @@ export default function Home() {
       <section
         id="hero"
         aria-label="Introduction"
-        className="flex flex-col items-start gap-6 pt-20 pb-24 sm:pt-28"
+        className="flex flex-col items-start gap-6 pt-14 pb-16 sm:pt-28 sm:pb-24"
       >
         <Reveal>
           <div className="flex flex-col items-start gap-6">

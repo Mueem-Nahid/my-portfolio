@@ -39,7 +39,7 @@ export function LabSection({ projects, coursework }: LabSectionProps) {
               type="button"
               onClick={() => scrollBy(-1)}
               aria-label="Scroll lab projects backward"
-              className="inline-flex size-9 items-center justify-center rounded-md border border-line text-muted transition-colors hover:border-warm/50 hover:text-ink"
+              className="inline-flex size-11 items-center justify-center rounded-md border border-line text-muted transition-colors hover:border-warm/50 hover:text-ink sm:size-9"
             >
               <Icon icon={ChevronLeft} size={16} />
             </button>
@@ -47,7 +47,7 @@ export function LabSection({ projects, coursework }: LabSectionProps) {
               type="button"
               onClick={() => scrollBy(1)}
               aria-label="Scroll lab projects forward"
-              className="inline-flex size-9 items-center justify-center rounded-md border border-line text-muted transition-colors hover:border-warm/50 hover:text-ink"
+              className="inline-flex size-11 items-center justify-center rounded-md border border-line text-muted transition-colors hover:border-warm/50 hover:text-ink sm:size-9"
             >
               <Icon icon={ChevronRight} size={16} />
             </button>
