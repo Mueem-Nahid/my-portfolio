@@ -1,0 +1,21 @@
+---
+title: "Fraud Detection Inference Service"
+summary: "MLOps serving stack for a fraud-detection model — registry, feature store, metrics, and IaC, not just a notebook."
+status: "in-progress"
+category: "AI/ML"
+tech: ["Python", "FastAPI", "MLflow", "Feast", "Redis", "Docker", "Pulumi"]
+repoUrl: "https://github.com/Mueem-Nahid/fraud-detection-inference-service"
+featured: true
+---
+
+## What it does
+
+Serves a fraud-detection model (Kaggle credit-card transactions baseline, intentionally simple enough to retrain in a demo) through FastAPI, with MLflow model registry + alias-based serving, Feast online feature retrieval over Redis, and Prometheus/Grafana observability including Feast hit/miss counters.
+
+## How it's built
+
+PostgreSQL-backed MLflow tracking, Docker Compose for the full local stack, Pulumi-provisioned AWS infrastructure (VPC, EC2, ECR, S3), and GitHub Actions CI/CD. Started from a course capstone scaffold and implemented through — the point of the exercise is the reproducible serving stack, not model accuracy.
+
+## Current state
+
+Local stack runs end to end (`/predict`, `/metrics`, `/health`); cloud deployment is lab/sandbox grade and torn down after demos.

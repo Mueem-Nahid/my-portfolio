@@ -1,0 +1,21 @@
+---
+title: "Image Captioning in Bangla"
+summary: "Full-stack app that trains and serves Bangla image captions — CNN-LSTM model behind a FastAPI service."
+status: "in-progress"
+category: "AI/ML"
+tech: ["Next.js", "TypeScript", "FastAPI", "TensorFlow", "PostgreSQL", "Redis", "Docker"]
+repoUrl: "https://github.com/Mueem-Nahid/image-captioning-in-bangla"
+featured: true
+---
+
+## What it does
+
+Upload an image, get an AI-generated caption in Bangla (with English fallback). Includes a training pipeline so custom models can be trained on your own image/caption datasets, plus batch captioning and model management APIs.
+
+## How it's built
+
+Next.js 15 frontend, FastAPI ML service (TensorFlow/Keras CNN-LSTM, OpenCV/PIL preprocessing), PostgreSQL + Redis, Nginx reverse proxy — everything containerized with separate dev and production compose files.
+
+## Current state
+
+Early stage — local Docker stack runs; the hard part ahead is training data quality for Bangla captions, documented in the model training guide.
