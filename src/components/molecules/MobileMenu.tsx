@@ -34,7 +34,7 @@ export function MobileMenu({ items }: MobileMenuProps) {
         <Icon icon={open ? X : Menu} size={20} />
       </button>
       {open ? (
-        <ul className="glass absolute top-full right-0 z-50 mt-2 w-56 rounded-xl p-2 shadow-xl">
+        <ul className="absolute top-full right-0 z-50 mt-2 w-56 rounded-xl border border-line bg-panel p-2 shadow-xl">
           {items.map((item) => (
             <li key={item.href}>
               <NavLink

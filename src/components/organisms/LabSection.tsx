@@ -58,7 +58,7 @@ export function LabSection({ projects, coursework }: LabSectionProps) {
       {projects.length > 0 ? (
         <div
           ref={rowRef}
-          className="flex snap-x snap-mandatory gap-4 overflow-x-auto pb-2 motion-reduce:scroll-smooth"
+          className="no-scrollbar flex snap-x snap-mandatory gap-4 overflow-x-auto pb-2 motion-reduce:scroll-smooth"
           tabIndex={0}
           role="region"
           aria-label="Personal AI/ML projects"
