@@ -1,4 +1,4 @@
-import { getAllProjects } from "@/lib/content";
+import { getAllProjects, getLabProjects } from "@/lib/content";
 
 /**
  * Stack section data (§4): derived from the union of every project's `tech`
@@ -17,6 +17,7 @@ const GROUPS = [
   "Frontend",
   "Backend & services",
   "Data & infrastructure",
+  "AI/ML",
 ] as const;
 
 type GroupName = (typeof GROUPS)[number];
@@ -34,6 +35,7 @@ const CATEGORY: Record<string, GroupName> = {
   "Chakra UI": "Frontend",
   "Redux Toolkit": "Frontend",
   Axios: "Frontend",
+  MUI: "Frontend",
   // Backend & services
   "Node.js": "Backend & services",
   "Express.js": "Backend & services",
@@ -44,13 +46,23 @@ const CATEGORY: Record<string, GroupName> = {
   tRPC: "Backend & services",
   NextAuth: "Backend & services",
   Stripe: "Backend & services",
-  LangChain: "Backend & services",
-  OpenAI: "Backend & services",
   Pusher: "Backend & services",
   WebSocket: "Backend & services",
   "Google Maps": "Backend & services",
   "AWS SES": "Backend & services",
   "Upstash QStash": "Backend & services",
+  FastAPI: "Backend & services",
+  "Socket.IO": "Backend & services",
+  // AI/ML — grouped visibly instead of scattered in Backend (§3.1)
+  LangChain: "AI/ML",
+  OpenAI: "AI/ML",
+  ChromaDB: "AI/ML",
+  Qdrant: "AI/ML",
+  Ragas: "AI/ML",
+  PyTorch: "AI/ML",
+  TensorFlow: "AI/ML",
+  MLflow: "AI/ML",
+  Feast: "AI/ML",
   // Data & infrastructure
   PostgreSQL: "Data & infrastructure",
   MongoDB: "Data & infrastructure",
@@ -58,11 +70,11 @@ const CATEGORY: Record<string, GroupName> = {
   Firestore: "Data & infrastructure",
   Prisma: "Data & infrastructure",
   GORM: "Data & infrastructure",
-  Redis: "Data & infrastructure",
-  ChromaDB: "Data & infrastructure",
+  Redis: "AI/ML",
   Elasticsearch: "Data & infrastructure",
   OpenSearch: "Data & infrastructure",
   Pandas: "Data & infrastructure",
+  Pulumi: "Data & infrastructure",
   AWS: "Data & infrastructure",
   Docker: "Data & infrastructure",
   Vercel: "Data & infrastructure",
@@ -70,7 +82,7 @@ const CATEGORY: Record<string, GroupName> = {
 
 export function getStackGroups(): StackGroup[] {
   const seen = new Map<string, GroupName>();
-  for (const project of getAllProjects()) {
+  for (const project of [...getAllProjects(), ...getLabProjects()]) {
     for (const tech of project.tech) {
       if (!seen.has(tech)) {
         seen.set(tech, CATEGORY[tech] ?? "Data & infrastructure");

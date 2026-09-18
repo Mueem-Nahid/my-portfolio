@@ -1,8 +1,5 @@
-import { Icon } from "@/components/atoms/Icon";
-import type { LucideIcon } from "lucide-react";
-
 type SocialIconLinkProps = {
-  icon: LucideIcon;
+  icon: React.ReactNode;
   href: string;
   label: string;
 };
@@ -17,7 +14,7 @@ export function SocialIconLink({ icon, href, label }: SocialIconLinkProps) {
       aria-label={label}
       className="inline-flex rounded-md border border-line p-2 text-muted transition-colors hover:border-warm/50 hover:text-ink"
     >
-      <Icon icon={icon} size={18} />
+      {icon}
     </a>
   );
 }

@@ -18,9 +18,9 @@ export function ContactSection({ profile }: ContactSectionProps) {
           done properly? Email me directly — I read everything.
         </Text>
         <div className="mt-6">
-          <Button href={`mailto:${profile.email}`}>
-            <Mail size={16} strokeWidth={1.75} aria-hidden="true" />
-            {profile.email}
+          <Button href={`mailto:${profile.email}`} className="max-w-full">
+            <Mail size={16} strokeWidth={1.75} aria-hidden="true" className="shrink-0" />
+            <span className="truncate">{profile.email}</span>
           </Button>
         </div>
       </div>

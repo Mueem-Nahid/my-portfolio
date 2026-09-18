@@ -1,4 +1,4 @@
-import type { Profile, Project } from "@/lib/content";
+import type { LabProject, Profile, Project, Service } from "@/lib/content";
 
 /**
  * SEO helpers (docs/requirments.md §8): canonical URLs, JSON-LD structured
@@ -31,7 +31,16 @@ export function personJsonLd(profile: Profile) {
       addressLocality: "Dhaka",
       addressCountry: "BD",
     },
-    sameAs: [profile.socials.github, profile.socials.linkedin],
+    sameAs: [profile.socials.github, profile.socials.linkedin].concat(
+      profile.socials.facebook ? [profile.socials.facebook] : [],
+    ),
+    knowsAbout: [
+      "Fullstack Web Development",
+      "Retrieval-Augmented Generation",
+      "Machine Learning Engineering",
+      "LLM application development",
+      "Subscription Billing Systems",
+    ],
   };
 }
 
@@ -43,6 +52,42 @@ export function projectJsonLd(project: Project) {
     name: project.title,
     description: project.summary,
     url: absoluteUrl(`/work/${project.slug}`),
+    programmingLanguage: project.tech,
+    author: {
+      "@type": "Person",
+      name: "Mueem Nahid Ibn Mahbub",
+      url: SITE_URL,
+    },
+  };
+}
+
+/** Service schema per content/services entry — freelance search intent (§4.4). */
+export function serviceJsonLd(services: Service[]) {
+  return {
+    "@context": "https://schema.org",
+    "@graph": services.map((service) => ({
+      "@type": "Service",
+      name: service.title,
+      description: service.summary,
+      url: absoluteUrl(`/#services`),
+      provider: {
+        "@type": "Person",
+        name: "Mueem Nahid Ibn Mahbub",
+        url: SITE_URL,
+      },
+      ...(service.startingAt ? { offers: { "@type": "Offer", price: service.startingAt } } : {}),
+    })),
+  };
+}
+
+/** SoftwareSourceCode schema for /lab/[slug] pages — mirrors /work. */
+export function labProjectJsonLd(project: LabProject) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "SoftwareSourceCode",
+    name: project.title,
+    description: project.summary,
+    url: absoluteUrl(`/lab/${project.slug}`),
     programmingLanguage: project.tech,
     author: {
       "@type": "Person",

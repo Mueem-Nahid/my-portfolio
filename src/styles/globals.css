@@ -68,6 +68,10 @@
 
 html {
   scroll-behavior: smooth;
+  /* Page-level horizontal scrolling is never legitimate here — inner
+     scrollers (lab row, gallery filmstrip) handle their own axis. `clip`
+     (not hidden) keeps position: sticky working. */
+  overflow-x: clip;
   /* A swipe on the gallery must never trigger pull-to-refresh (page reload). */
   overscroll-behavior-y: none;
 }
@@ -76,6 +80,7 @@ body {
   background-color: var(--bg-base);
   color: var(--text-primary);
   font-family: var(--font-sans);
+  overflow-x: clip;
   overscroll-behavior-y: none;
 }
 
@@ -104,6 +109,17 @@ body {
   outline: 2px solid var(--accent-warm);
   outline-offset: 2px;
   border-radius: 2px;
+}
+
+/* Inner scrollers with their own navigation (lab row arrows/keys/swipe,
+   gallery thumbnails/keys/swipe) — the native bar is redundant chrome. */
+.no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
 }
 
 /* Motion responds to the user, never plays at them (§5.4) */

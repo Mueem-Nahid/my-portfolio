@@ -1,0 +1,21 @@
+---
+title: "Career Agent Platform"
+summary: "Privacy-respectful hybrid AI platform for personalized job applications — local embeddings, background job parsing."
+status: "in-progress"
+category: "AI/ML"
+tech: ["Python", "FastAPI", "Next.js", "Qdrant", "Redis", "Docker"]
+repoUrl: "https://github.com/Mueem-Nahid/personal-ai-platform"
+featured: true
+---
+
+## What it does
+
+Parses job postings and runs fit analysis against candidate profiles. Embeddings and sensitive documents stay local (Ollama bge-m3); job-post parsing uses a free cloud LLM (Groq Llama 3.1 8B) for speed. No telemetry, no paid services.
+
+## How it's built
+
+Next.js dashboard behind a FastAPI gateway, with parsing dispatched to Redis-backed ARQ workers decoupled from the HTTP server. PostgreSQL with pgvector, Qdrant, MinIO, and Ollama all run under one docker compose stack. LLM calls go through a provider plug, so the backend switches between Groq, Ollama, and Gemini by env var.
+
+## Current state
+
+Job Analysis Agent complete; working through a 16-phase roadmap documented in ADRs under `docs/`.

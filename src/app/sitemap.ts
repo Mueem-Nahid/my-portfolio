@@ -1,8 +1,8 @@
 import type { MetadataRoute } from "next";
-import { getProjectsWithBody } from "@/lib/content";
+import { getLabProjectsWithBody, getProjectsWithBody } from "@/lib/content";
 import { absoluteUrl } from "@/lib/seo";
 
-/** Auto-includes every generated /work/[slug] route (§8). */
+/** Auto-includes every generated /work/[slug] and /lab/[slug] route (§8). */
 export default function sitemap(): MetadataRoute.Sitemap {
   return [
     {
@@ -14,6 +14,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
       url: absoluteUrl(`/work/${project.slug}`),
       changeFrequency: "monthly" as const,
       priority: 0.7,
+    })),
+    ...getLabProjectsWithBody().map((project) => ({
+      url: absoluteUrl(`/lab/${project.slug}`),
+      changeFrequency: "monthly" as const,
+      priority: 0.6,
     })),
   ];
 }

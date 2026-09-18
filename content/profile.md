@@ -3,9 +3,16 @@ name: "Mueem Nahid Ibn Mahbub"
 title: "Senior Fullstack Engineer"
 tagline: "I build the systems behind production SaaS — subscription billing, RAG pipelines, live order tracking — remotely for Japanese clients."
 statusLine: "Currently building at Brand Cloud Inc, Tokyo-remote"
+currentlyLine: "Currently deepening into AI/ML — RAG systems, model evaluation, applied ML engineering."
+responseTime: "Typically responds within 24h"
 location: "Dhaka, Bangladesh"
 email: "mueem51@gmail.com"
 socials:
   github: "https://github.com/Mueem-Nahid"
   linkedin: "https://www.linkedin.com/in/mueem-nahid/"
+  facebook: "https://www.facebook.com/mueem.nahid"
+coursework:
+  - name: "MLOps with Cloud"
+    provider: "Poridhi"
+    status: "in-progress"
 ---

@@ -25,7 +25,23 @@ const profileSchema = z.object({
   socials: z.object({
     github: z.url(),
     linkedin: z.url(),
+    facebook: z.string().default(""),
   }),
+  /** Second line under the hero status card naming the AI/ML direction (§3.1) */
+  currentlyLine: z.string().default(""),
+  /** Concrete availability signal, e.g. "Typically responds within 24h" (§4.2) */
+  responseTime: z.string().default(""),
+  /** Compact continued-learning list, rendered at the bottom of LabSection (§2.6) */
+  coursework: z
+    .array(
+      z.object({
+        name: z.string(),
+        provider: z.string(),
+        status: z.enum(["in-progress", "completed"]),
+        certUrl: z.string().default(""),
+      }),
+    )
+    .default([]),
 });
 
 const projectSchema = z.object({
@@ -68,6 +84,54 @@ const educationSchema = z.object({
   url: z.string().default(""),
 });
 
+// ---------- v2 schemas (PORTFOLIO-V2-UPDATE.md §4.1, §2.4) ----------
+
+const serviceSchema = z.object({
+  title: z.string(),
+  summary: z.string(),
+  deliverables: z.array(z.string()),
+  timeline: z.string(),
+  /** lucide icon name */
+  icon: z.string().default(""),
+  order: z.number(),
+  /**
+   * Owner fills in a real number; omit the field entirely to hide price.
+   * Never fabricate — no price UI renders when absent.
+   */
+  startingAt: z.string().optional(),
+});
+
+const labProjectSchema = z.object({
+  title: z.string(),
+  summary: z.string(),
+  status: z.enum(["live", "in-progress", "archived"]),
+  category: z.string().default("AI/ML"),
+  tech: z.array(z.string()),
+  metrics: z.array(z.string()).default([]),
+  demoUrl: z.string().default(""),
+  repoUrl: z.string().default(""),
+  /** "YYYY-MM" */
+  lastUpdated: z.string().default(""),
+  featured: z.boolean().default(false),
+});
+
+const testimonialSchema = z.object({
+  clientName: z.string(),
+  clientRole: z.string().default(""),
+  quote: z.string(),
+  /** optional link back to a /work/[slug] or service */
+  projectSlug: z.string().default(""),
+});
+
+const faqSchema = z.object({
+  faqs: z.array(
+    z.object({
+      q: z.string(),
+      a: z.string(),
+    }),
+  ),
+});
+
 // ---------- Public types ----------
 
 export type Profile = z.infer<typeof profileSchema>;
@@ -96,6 +160,26 @@ export type ExperienceEntry = z.infer<typeof experienceSchema> & {
 };
 
 export type EducationEntry = z.infer<typeof educationSchema>;
+
+export type CourseworkEntry = z.infer<typeof profileSchema>["coursework"][number];
+
+export type Service = z.infer<typeof serviceSchema> & {
+  slug: string;
+};
+
+export type LabProject = z.infer<typeof labProjectSchema> & {
+  slug: string;
+  /** Raw MDX body ("" when the file has frontmatter only) */
+  body: string;
+  /** Whether this project gets a generated /lab/[slug] detail page */
+  hasBody: boolean;
+};
+
+export type Testimonial = z.infer<typeof testimonialSchema> & {
+  slug: string;
+};
+
+export type FaqEntry = z.infer<typeof faqSchema>["faqs"][number];
 
 // ---------- Internals ----------
 
@@ -281,4 +365,70 @@ export function getEducation(): EducationEntry[] {
   return listFiles(path.join(CONTENT_DIR, "education"), [".md"])
     .map((file) => parseOrThrow(educationSchema, readFile(file).data, file))
     .sort((a, b) => b.start.localeCompare(a.start));
+}
+
+// ---------- v2 loaders ----------
+
+/** Services sorted by explicit `order` — 3 max per spec (§4.1). */
+export function getServices(): Service[] {
+  return listFiles(path.join(CONTENT_DIR, "services"), [".md"])
+    .map((file) => {
+      const frontmatter = parseOrThrow(serviceSchema, readFile(file).data, file);
+      return { ...frontmatter, slug: path.basename(file, path.extname(file)) };
+    })
+    .sort((a, b) => a.order - b.order);
+}
+
+function loadLabProject(filePath: string): LabProject {
+  const { data, content } = readFile(filePath);
+  const frontmatter = parseOrThrow(labProjectSchema, data, filePath);
+  const slug = path.basename(filePath, path.extname(filePath));
+  const body = content.trim();
+  return { ...frontmatter, slug, body, hasBody: body.length > 0 };
+}
+
+/** Featured first, then most recently updated. */
+export function getLabProjects(): LabProject[] {
+  const files = listFiles(path.join(CONTENT_DIR, "lab-projects"), [".mdx", ".md"]);
+  return files
+    .map(loadLabProject)
+    .sort(
+      (a, b) =>
+        Number(b.featured) - Number(a.featured) ||
+        b.lastUpdated.localeCompare(a.lastUpdated) ||
+        a.title.localeCompare(b.title),
+    );
+}
+
+export function getFeaturedLabProjects(): LabProject[] {
+  return getLabProjects().filter((p) => p.featured);
+}
+
+export function getLabProjectBySlug(slug: string): LabProject | null {
+  return getLabProjects().find((p) => p.slug === slug) ?? null;
+}
+
+/** Lab projects that get a /lab/[slug] detail page (frontmatter + MDX body). */
+export function getLabProjectsWithBody(): LabProject[] {
+  return getLabProjects().filter((p) => p.hasBody);
+}
+
+/**
+ * Empty folder = no section on the page. Never ship a placeholder
+ * testimonial — the organism renders null when this is empty (§4.2).
+ */
+export function getTestimonials(): Testimonial[] {
+  return listFiles(path.join(CONTENT_DIR, "testimonials"), [".md"])
+    .map((file) => {
+      const frontmatter = parseOrThrow(testimonialSchema, readFile(file).data, file);
+      return { ...frontmatter, slug: path.basename(file, path.extname(file)) };
+    })
+    .sort((a, b) => a.slug.localeCompare(b.slug));
+}
+
+/** FAQ entries for freelance-client objections (§4.2). Empty array when no file yet. */
+export function getFaq(): FaqEntry[] {
+  const file = path.join(CONTENT_DIR, "faq.md");
+  if (!fs.existsSync(file)) return [];
+  return parseOrThrow(faqSchema, readFile(file).data, file).faqs;
 }

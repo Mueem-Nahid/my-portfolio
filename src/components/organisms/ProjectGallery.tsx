@@ -111,7 +111,7 @@ export function ProjectGallery({ images, title }: ProjectGalleryProps) {
       {/* Thumbnail filmstrip */}
       {count > 1 ? (
         <div
-          className="mt-3 flex gap-2 overflow-x-auto pb-1"
+          className="no-scrollbar mt-3 flex gap-2 overflow-x-auto pb-1"
           role="tablist"
           aria-label="Choose screenshot"
         >
