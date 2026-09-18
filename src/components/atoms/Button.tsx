@@ -1,3 +1,4 @@
+import NextLink from "next/link";
 import { cx } from "@/lib/cx";
 
 type ButtonProps = {
@@ -30,6 +31,15 @@ export function Button({
   );
 
   if (href) {
+    // Root-relative links stay client-side (no reload); everything else
+    // (mailto:, external URLs) renders a plain anchor as before.
+    if (href.startsWith("/")) {
+      return (
+        <NextLink href={href} className={classes}>
+          {children}
+        </NextLink>
+      );
+    }
     return (
       <a
         href={href}

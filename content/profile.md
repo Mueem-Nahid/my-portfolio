@@ -10,4 +10,9 @@ email: "mueem51@gmail.com"
 socials:
   github: "https://github.com/Mueem-Nahid"
   linkedin: "https://www.linkedin.com/in/mueem-nahid/"
+  facebook: "https://www.facebook.com/mueem.nahid"
+coursework:
+  - name: "MLOps with Cloud"
+    provider: "Poridhi"
+    status: "in-progress"
 ---

@@ -1,6 +1,7 @@
 import { Button } from "@/components/atoms/Button";
 import { MobileMenu } from "@/components/molecules/MobileMenu";
 import { NavLink } from "@/components/molecules/NavLink";
+import { ScrollToTopLink } from "@/components/molecules/ScrollToTopLink";
 
 export type NavItem = {
   label: string;
@@ -22,12 +23,9 @@ export function Navbar({ name, items, cta }: NavbarProps) {
         aria-label="Primary"
         className="mx-auto flex min-h-14 w-full max-w-6xl items-center justify-between gap-x-4 px-4 py-2 sm:px-6"
       >
-        <a
-          href="#top"
-          className="shrink-0 text-sm font-semibold tracking-tight text-ink"
-        >
+        <ScrollToTopLink className="shrink-0 text-sm font-semibold tracking-tight text-ink">
           {name}
-        </a>
+        </ScrollToTopLink>
         {/* Desktop: inline links + CTA */}
         <div className="hidden flex-wrap items-center gap-x-1 gap-y-2 sm:flex">
           <ul className="flex flex-wrap items-center justify-end gap-x-1">

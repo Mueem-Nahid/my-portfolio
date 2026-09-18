@@ -1,3 +1,4 @@
+import NextLink from "next/link";
 import { cx } from "@/lib/cx";
 
 type NavLinkProps = {
@@ -7,10 +8,13 @@ type NavLinkProps = {
   onClick?: () => void;
 };
 
-/** Nav anchor link — sentence case, muted until hovered. */
+/**
+ * Nav link — root-relative hashes (/#work) so it works from detail pages
+ * too; Next.js handles same-page hashes client-side without a reload.
+ */
 export function NavLink({ href, children, className, onClick }: NavLinkProps) {
   return (
-    <a
+    <NextLink
       href={href}
       onClick={onClick}
       className={cx(
@@ -19,6 +23,6 @@ export function NavLink({ href, children, className, onClick }: NavLinkProps) {
       )}
     >
       {children}
-    </a>
+    </NextLink>
   );
 }

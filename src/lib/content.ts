@@ -25,6 +25,7 @@ const profileSchema = z.object({
   socials: z.object({
     github: z.url(),
     linkedin: z.url(),
+    facebook: z.string().default(""),
   }),
   /** Second line under the hero status card naming the AI/ML direction (§3.1) */
   currentlyLine: z.string().default(""),

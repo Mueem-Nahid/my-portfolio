@@ -31,7 +31,9 @@ export function personJsonLd(profile: Profile) {
       addressLocality: "Dhaka",
       addressCountry: "BD",
     },
-    sameAs: [profile.socials.github, profile.socials.linkedin],
+    sameAs: [profile.socials.github, profile.socials.linkedin].concat(
+      profile.socials.facebook ? [profile.socials.facebook] : [],
+    ),
     knowsAbout: [
       "Fullstack Web Development",
       "Retrieval-Augmented Generation",
